@@ -665,7 +665,7 @@ if (!file.exists(file)){
 
 <a href ="maps/center_dotscartogramgdp2018.png" target = "_BLANK"><img src ="maps/center_dotscartogramgdp2018.png" width = "100%"></img></a>
 
-A map with position = "random"
+Carte avec position = "random"
 
 ```{r eval=TRUE, message=FALSE, warning=FALSE}
 
@@ -676,7 +676,7 @@ if (!file.exists(file)){
   dotscartogram2(var = "gdp",year = 2018, itermax = 100, onedot = 60,
                 radius = 80000, col = red, 
                 position = "random",
-                title = "Dots cartogram du PIB (random)",
+                title = "Dots cartogram du PIB (aléatoire)",
                 unit = "milliards de $")
   dev.off()
 
@@ -697,7 +697,7 @@ if (!file.exists(file)){
   dotscartogram2(var = "gdp",year = 2018, itermax = 100, onedot = 60,
                 radius = 80000, col = red, 
                 position = "regular",
-                title = "Dots cartogram du PIB (regular)",
+                title = "Dots cartogram du PIB (régulier)",
                 unit = "milliards de $")
   dev.off()
 
@@ -759,7 +759,7 @@ if (!file.exists(file)){
   template(year = year, title = title)
   
   choroLayer(x = circles, var = "s", method = "q6", col = cols,
-             legend.title.txt = "Gdp per capita (in $)",
+             legend.title.txt = "PIB par habitant (en $)",
              legend.pos = c(-13000000, -4000000),
              legend.title.cex = 0.8,
   legend.values.cex = 0.6,
@@ -784,7 +784,7 @@ Ici, nous proposons une autre alternative où le nombre de points dans chaque pa
 
 dotscartogram4 <- function(var = "pop", year = 2018, itermax = 10,
                           divide = 4, k = 1, col = red,
-                          title = "Map Title"){
+                          title = "Map Title", legtitle = "Legend"){
   
 x <- getcentroids(var, year)
 x <- x[x$v > 0,c("x","y","v")]
@@ -803,6 +803,8 @@ simulation <- circleRepelLayout(x = dots, xysizecols = 1:3,
                                 maxiter = itermax, weights =1)$layout
 circles <- st_buffer(sf::st_as_sf(simulation, coords =c('x', 'y'),
                       crs = sf::st_crs(sphere)), dist = simulation$radius)
+
+#legend(x = circles, var = "v", pos =c(-12000000,-5000000), title.txt = legtitle)
 template(year = year, title = title)
 plot(st_geometry(circles), col = col, border= "#283445", lwd = 0.5, add= T)
 }
@@ -816,7 +818,7 @@ file <- "maps/dotscartogrampop2018_alter.png"
 if (!file.exists(file)){
   png(file, width = 2000, height = 1120, res = 150)
   dotscartogram4(var = "pop",year = 2018, k = kpop, itermax = 20, divide = 50, col = blue,
-            title = "Population mondiale, en 2018 (divide = 50)")
+            title = "Population mondiale, en 2018 (divide = 50)", legtitle = "Nombre d'habitants")
   dev.off()
 
 }
@@ -833,7 +835,7 @@ file <- "maps/dotscartogramgdp2018_alter.png"
 if (!file.exists(file)){
   png(file, width = 2000, height = 1120, res = 150)
   dotscartogram4(var = "gdp",year = 2018, k = kgdp, itermax = 20, divide = 50, col = red,
-            title = "PIB mondial en 2018 (divide = 50)")
+            title = "PIB mondial en 2018 (divide = 50)", legtitle = "PIB (en $)")
   dev.off()
 
 }
