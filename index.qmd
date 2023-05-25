@@ -1,10 +1,16 @@
 ---
-title: "Dot Cartograms"
+title: "Dodge Dotmaps"
 author: "Lambert N. & Bahoken F."
-date: "2021"
-output:
-  rmdformats::readthedown
-link_citations: true
+format:
+  html:
+    theme: sandstone
+    fontsize: 0.9em
+    code-tools: true
+    toc: true
+    toc-depth: 2
+    linkcolor: "#8631ad"
+execute: 
+  cache: false
   
 ---
 
@@ -16,7 +22,10 @@ Toutes les cartes construites dans cette publication sont basées sur les donné
 
 ## Packages
 
-```{r, eval = TRUE, message = FALSE, warning = FALSE}
+```{r}
+#| eval = TRUE,
+#| message = FALSE,
+#| warning = FALSE
 library(readxl)
 library(sf)
 library(packcircles)
@@ -27,7 +36,10 @@ library(magick)
 
 Import de données
 
-```{r, eval = TRUE, message = FALSE, warning = FALSE}
+```{r}
+#| eval = TRUE,
+#| message = FALSE,
+#| warning = FALSE
 maddison = data.frame(read_excel("data/mpd2020.xlsx", sheet = "Full data"))
 maddison <- maddison[maddison$year>=1950,]
 maddison$gdp <- maddison$gdppc * maddison$pop / 1000000
@@ -35,7 +47,10 @@ maddison$gdp <- maddison$gdppc * maddison$pop / 1000000
 
 Import des géométries
 
-```{r, eval = TRUE, message = FALSE, warning = FALSE}
+```{r}
+#| eval = TRUE,
+#| message = FALSE,
+#| warning = FALSE
 countries <- st_read("data/world_countries_data.shp", quiet = TRUE )
 countries <- countries[,c("ISO3", "NAMEen", "NAMEfr","geometry")]
 colnames(countries) <- c("id", "NAMEen", "NAMEfr","geometry")
@@ -43,14 +58,20 @@ colnames(countries) <- c("id", "NAMEen", "NAMEfr","geometry")
 
 Graticule & sphere
 
-```{r, eval = TRUE, message = FALSE, warning = FALSE}
+```{r}
+#| eval = TRUE,
+#| message = FALSE,
+#| warning = FALSE
 sphere <- st_read("data/ne_110m_wgs84_bounding_box.shp", quiet = TRUE )
 graticule <- st_read("data/ne_110m_graticules_20.shp", quiet = TRUE )
 ```
 
 Projection
 
-```{r, eval = TRUE, message = FALSE, warning = FALSE}
+```{r}
+#| eval = TRUE,
+#| message = FALSE,
+#| warning = FALSE
 crs <- "+proj=robin +lon_0=0 +x_0=0 +y_0=0 +ellps=WGS84 +datum=WGS84 +units=m +no_defs"
 countries <- st_transform(countries, crs)
 graticule <- st_transform(graticule, crs)
@@ -59,7 +80,10 @@ sphere <- st_transform(sphere, crs)
 
 Le cas du Soudan
 
-```{r, eval = TRUE, message = FALSE, warning = FALSE}
+```{r}
+#| eval = TRUE,
+#| message = FALSE,
+#| warning = FALSE
 l <- c("SSD", "SDN") 
 df <- data.frame(id = "SDN", NAMEen = "Sudan (former)", NAMEfr = "Soudan")
 geom <- st_union(st_geometry(countries[countries$id %in% l,]))
@@ -70,7 +94,10 @@ countries <- rbind(countries,SDN)
 
 Le cas de la Tchécoslovaquie
 
-```{r, eval = TRUE, message = FALSE, warning = FALSE}
+```{r}
+#| eval = TRUE,
+#| message = FALSE,
+#| warning = FALSE
 l <- c("SVK","CZE")
 df <- data.frame(id = "CSK", NAMEen = "Czechoslovakia", NAMEfr = "Tchécoslovaquie")
 geom <- st_union(st_geometry(countries[countries$id %in% l,]))
@@ -80,7 +107,10 @@ countries <- rbind(countries,CSK)
 
 Le cas de la Yougolslavie
 
-```{r, eval = TRUE, message = FALSE, warning = FALSE}
+```{r}
+#| eval = TRUE,
+#| message = FALSE,
+#| warning = FALSE
 l <- c("SVN","HRV","BIH","SRB", "MNE","MKD","KOS")
 df <- data.frame(id = "YUG", NAMEen = "Former Yugoslavia", NAMEfr = "Ex-Yougoslavie")
 geom <- st_union(st_geometry(countries[countries$id %in% l,]))
@@ -90,7 +120,10 @@ countries <- rbind(countries,YUG)
 
 L'union soviétique
 
-```{r, eval = TRUE, message = FALSE, warning = FALSE}
+```{r}
+#| eval = TRUE,
+#| message = FALSE,
+#| warning = FALSE
 l <- c("RUS","UKR","BLR","MDA","UZB","KAZ","KGZ","TJK",
           "TKM","GEO","AZE","ARM","LTU","LVA","EST")
 df <- data.frame(id = "SUN", NAMEen = "Former USSR", NAMEfr = "URSS")
@@ -101,7 +134,10 @@ countries <- rbind(countries,SUN)
 
 Le monde de 1950 à 1991.
 
-```{r, eval = TRUE, message = FALSE, warning = FALSE}
+```{r}
+#| eval = TRUE,
+#| message = FALSE,
+#| warning = FALSE
 l1 = c("SVK", "CZE", "RUS", "UKR", "BLR", "MDA", "UZB","KAZ",
     "KGZ", "TJK", "TKM", "GEO", "AZE", "ARM", "LTU", "LVA",
     "EST","SVN","HRV", "BIH", "SRB","MNE", "MKD", "KOS")
@@ -110,7 +146,10 @@ world1 <- countries[!countries$id %in% l1,]
 
 Le mond en 1992.
 
-```{r, eval = TRUE, message = FALSE, warning = FALSE}
+```{r}
+#| eval = TRUE,
+#| message = FALSE,
+#| warning = FALSE
 l2 = c("CSK", "YUG","RUS", "UKR", "BLR", "MDA","UZB", "KAZ",
     "KGZ", "TJK", "TKM", "GEO", "AZE", "ARM", "LTU", "LVA",
     "EST")
@@ -119,14 +158,20 @@ world2 <- countries[!countries$id %in% l2,]
 
 Le monde de 1993 à 2018.
 
-```{r, eval = TRUE, message = FALSE, warning = FALSE}
+```{r}
+#| eval = TRUE,
+#| message = FALSE,
+#| warning = FALSE
 l3 = c("CSK", "SUN", "YUG")
 world3 <- countries[!countries$id %in% l3,]
 ```
 
 Données manquantes
 
-```{r, eval = TRUE, message = FALSE, warning = FALSE}
+```{r}
+#| eval = TRUE,
+#| message = FALSE,
+#| warning = FALSE
 l = c("ATA","AND", "ATG", "BHS", "BLZ", "BRN", "BTN", "ERI", "FJI", "FLK", "FRO",
       "FSM", "GGY", "GRD", "GRL", "GUY", "IMN", "JEY", "KIR", "KNA", "LIE", "MAC",
       "MCO", "MDV", "MHL", "NCL", "NRU", "PLW", "PNG", "SAH", "SLB", "SMR", "SOM",
@@ -134,11 +179,31 @@ l = c("ATA","AND", "ATG", "BHS", "BLZ", "BRN", "BTN", "ERI", "FJI", "FLK", "FRO"
 missing <- countries[countries$id %in% l,]
 ```
 
+## Dossiers
+
+```{r}
+#| eval = TRUE,
+#| message = FALSE,
+#| warning = FALSE
+if (!file.exists("maps")){
+  dir.create("maps")
+}
+
+if (!file.exists("tmp")){
+  dir.create("tmp")
+  dir.create("tmp/gdp")
+  dir.create("tmp/pop")
+}
+```
+
 ## Fonctions utiles
 
 Charte graphique (couleurs)
 
-```{r eval=TRUE, message=FALSE, warning=FALSE}
+```{r}
+#| eval = TRUE,
+#| message = FALSE,
+#| warning = FALSE
 background <- "#ebeced"
 water <- "#b1cbe6"
 land <- "#e0d98b"
@@ -149,7 +214,10 @@ blue <- "#406dc7"
 
 Fonction pour créer un template cartographique
 
-```{r eval=TRUE, message=FALSE, warning=FALSE}
+```{r}
+#| eval = TRUE,
+#| message = FALSE,
+#| warning = FALSE
 
 template <- function(year, title){
 
@@ -186,7 +254,10 @@ template <- function(year, title){
 
 Function pour récupérer les centroides et des informations utiles.
 
-```{r eval=TRUE, message=FALSE, warning=FALSE}
+```{r}
+#| eval = TRUE,
+#| message = FALSE,
+#| warning = FALSE
 
 getcentroids <- function(var,year){
 if (year <= 1991){x <- world1}
@@ -215,7 +286,10 @@ return(x)
 
 Calibration de la taille.
 
-```{r eval=TRUE, message=FALSE, warning=FALSE}
+```{r}
+#| eval = TRUE,
+#| message = FALSE,
+#| warning = FALSE
 rmax <- 1400000
 x <- getcentroids("pop", 2018)
 kpop <- rmax * rmax /max(x$v)
@@ -227,7 +301,10 @@ kgdp <- rmax * rmax /max(x$v)
 Légende
 
 
-```{r eval=TRUE, message=FALSE, warning=FALSE}
+```{r}
+#| eval = TRUE,
+#| message = FALSE,
+#| warning = FALSE
 
 legend <- function(x, var, pos = NULL, col = "#FFFFFF00",
                                      border = "#283445",lwd = 1, values.cex = 0.6,
@@ -282,7 +359,10 @@ legend <- function(x, var, pos = NULL, col = "#FFFFFF00",
 
 ## Template cartographique
 
-```{r eval=TRUE, message=FALSE, warning=FALSE}
+```{r}
+#| eval = TRUE,
+#| message = FALSE,
+#| warning = FALSE
 
 file <- "maps/maptemplate.png"
 
@@ -299,7 +379,10 @@ if (!file.exists(file)){
 
 ## Centroîdes
 
-```{r eval=TRUE, message=FALSE, warning=FALSE}
+```{r}
+#| eval = TRUE,
+#| message = FALSE,
+#| warning = FALSE
 
 drawcentroids <- function(var = "pop", year = 2018, col = red, r = 10,
                         title = "Map Title"){
@@ -313,7 +396,10 @@ plot(st_geometry(circles), col = col, border= "#283445", lwd = 0.5, add= T)
 ```
 
 
-```{r eval=TRUE, message=FALSE, warning=FALSE}
+```{r}
+#| eval = TRUE,
+#| message = FALSE,
+#| warning = FALSE
 
 file <- "maps/centroids.png"
 
@@ -332,7 +418,10 @@ if (!file.exists(file)){
 
 NB : Même si cela aurait été plus facile, le choix a été fait ici de ne pas utiliser le [package cartography] (https://cran.r-project.org/web/packages/cartography/index.html) afin d'exploiter au mieux les fonctionnalités de base de R. L'objectif est d'avoir une très grande comparabilité entre les cartes. 
 
-```{r eval=TRUE, message=FALSE, warning=FALSE}
+```{r}
+#| eval = TRUE,
+#| message = FALSE,
+#| warning = FALSE
 
 propsymbols <- function(var = "pop", year = 2018, k = 1, col = red,
                         title = "Map Title", leg.title = "Legend"){
@@ -347,7 +436,10 @@ legend(x = circles, var = "v", pos =c(-12000000,-5000000), title.txt = leg.title
 }
 ```
 
-```{r eval=TRUE, message=FALSE, warning=FALSE}
+```{r}
+#| eval = TRUE,
+#| message = FALSE,
+#| warning = FALSE
 
 file <- "maps/propsymbolspop2018.png"
 
@@ -364,7 +456,10 @@ if (!file.exists(file)){
 
 <a href ="maps/propsymbolspop2018.png" target = "_BLANK"><img src ="maps/propsymbolspop2018.png" width = "100%"></img></a>
 
-```{r eval=TRUE, message=FALSE, warning=FALSE}
+```{r}
+#| eval = TRUE,
+#| message = FALSE,
+#| warning = FALSE
 
 file <- "maps/propsymbolsgdp2018.png"
 
@@ -383,7 +478,10 @@ if (!file.exists(file)){
 
 ## Carte par points
 
-```{r eval=TRUE, message=FALSE, warning=FALSE}
+```{r}
+#| eval = TRUE,
+#| message = FALSE,
+#| warning = FALSE
 
 dotdensitymap <- function(var = "pop", year = 2018, onedot = 1, radius = 1,
                           col = red, title = "Map Title", unit =""){
@@ -406,7 +504,10 @@ text(x= 0, y = -6000000, paste0("1 dot = ",onedot, " ",unit),
 
 ```
 
-```{r eval=TRUE, message=FALSE, warning=FALSE}
+```{r}
+#| eval = TRUE,
+#| message = FALSE,
+#| warning = FALSE
 
 file <- "maps/dotdensitypop2018.png"
 
@@ -421,7 +522,10 @@ dev.off()
 
 <a href ="maps/dotdensitypop2018.png" target = "_BLANK"><img src ="maps/dotdensitypop2018.png" width = "100%"></img></a>
 
-```{r eval=TRUE, message=FALSE, warning=FALSE}
+```{r}
+#| eval = TRUE,
+#| message = FALSE,
+#| warning = FALSE
 
 file <- "maps/dotdensitygdp2018.png"
 
@@ -438,7 +542,10 @@ dev.off()
 
 ## Cartogramme de Dorling
 
-```{r eval=TRUE, message=FALSE, warning=FALSE}
+```{r}
+#| eval = TRUE,
+#| message = FALSE,
+#| warning = FALSE
 
 dorling <- function(var = "pop", year = 2018, k = 1, itermax = 10,
                     col = red, title = "Map Title", leg.title ="Legend"){
@@ -460,7 +567,10 @@ legend(x = circles, var = "v", pos =c(-12000000,-5000000), title.txt = leg.title
 
 ```
 
-```{r eval=TRUE, message=FALSE, warning=FALSE}
+```{r}
+#| eval = TRUE,
+#| message = FALSE,
+#| warning = FALSE
 
 file <- "maps/drolingpop2018.png"
 
@@ -477,7 +587,10 @@ if (!file.exists(file)){
 
 <a href ="maps/drolingpop2018.png" target = "_BLANK"><img src ="maps/drolingpop2018.png" width = "100%"></img></a>
 
-```{r eval=TRUE, message=FALSE, warning=FALSE}
+```{r}
+#| eval = TRUE,
+#| message = FALSE,
+#| warning = FALSE
 
 file <- "maps/drolinggdp2018.png"
 
@@ -496,7 +609,10 @@ if (!file.exists(file)){
 
 ## Dodge Dotmap
 
-```{r eval=TRUE, message=FALSE, warning=FALSE}
+```{r}
+#| eval = TRUE,
+#| message = FALSE,
+#| warning = FALSE
 
 dodgedotmap <- function(var = "pop", year = 2018, itermax = 10,
                           onedot = 1, radius = 1, col = red,
@@ -533,7 +649,10 @@ plot(st_geometry(circles), col = col, border= "#283445", lwd = 0.5, add= T)
 
 ```
 
-```{r eval=TRUE, message=FALSE, warning=FALSE}
+```{r}
+#| eval = TRUE,
+#| message = FALSE,
+#| warning = FALSE
 
 file <- "maps/dodgedotmappop2018.png"
 
@@ -541,7 +660,7 @@ if (!file.exists(file)){
   png(file, width = 2000, height = 1120, res = 150)
   dodgedotmap(var = "pop",year = 2018, itermax = 70, onedot = 10000,
                 radius = 100000, col = blue, 
-                title = "Dots cartogram de la population mondiale en 2018", unit = "hab.")
+                title = "Dodge Dotmap de la population mondiale en 2018", unit = "hab.")
   dev.off()
 
 }
@@ -550,7 +669,10 @@ if (!file.exists(file)){
 <a href ="maps/dodgedotmappop2018.png" target = "_BLANK"><img src ="maps/dodgedotmappop2018.png" width = "100%"></img></a>
 
 
-```{r eval=TRUE, message=FALSE, warning=FALSE}
+```{r}
+#| eval = TRUE,
+#| message = FALSE,
+#| warning = FALSE
 
 file <- "maps/dodgedotmapgdp2018.png"
 
@@ -558,7 +680,7 @@ if (!file.exists(file)){
   png(file, width = 2000, height = 1120, res = 150)
   dodgedotmap(var = "gdp",year = 2018, itermax = 70, onedot = 100,
                 radius = 100000, col = red, 
-                title = "Dots Cartogram du PIB mondial en 2018",  unit = "milliards $")
+                title = "Dodge Dotmap du PIB mondial en 2018",  unit = "milliards $")
   dev.off()
 
 }
@@ -568,7 +690,10 @@ if (!file.exists(file)){
 
 Bien sûr, nous pouvons modifier la taille et la valeur de chaque point.
 
-```{r eval=TRUE, message=FALSE, warning=FALSE}
+```{r}
+#| eval = TRUE,
+#| message = FALSE,
+#| warning = FALSE
 
 file <- "maps/dodgedotmapgdp2018_v2.png"
 
@@ -576,7 +701,7 @@ if (!file.exists(file)){
   png(file, width = 2000, height = 1120, res = 150)
   dodgedotmap(var = "gdp",year = 2018, itermax = 100, onedot = 20,
                 radius = 60000, col = red, 
-                title = "Dots cartogram du PIB mondial, 2018", unit = "milliards de $")
+                title = "Dodge Dotmap du PIB mondial, 2018", unit = "milliards de $")
   dev.off()
 
 }
@@ -584,11 +709,14 @@ if (!file.exists(file)){
 
 <a href ="maps/dodgedotmapgdp2018_v2.png" target = "_BLANK"><img src ="maps/dodgedotmapgdp2018_v2.png" width = "100%"></img></a>
 
-## Dot Cartogram (amélioration)
+## Dodge Dotmap (amélioration)
 
 Ici, nous ajoutons le paramètre "position" à la fonction dodgedotmapme afin que les points puissent être disposés de manière régulière ou aléatoire à l'intérieur des pays, et non plus seulement répartis à partir du centroïde. Les trois cartes suivantes vous permettent de visualiser l'effet de ce paramètre.
 
-```{r eval=TRUE, message=FALSE, warning=FALSE}
+```{r}
+#| eval = TRUE,
+#| message = FALSE,
+#| warning = FALSE
 
 dodgedotmap2 <- function(var = "pop", year = 2018, itermax = 10,
                           onedot = 1, position = "center", radius = 1, col = red,
@@ -602,6 +730,7 @@ x <- merge(x, maddison[maddison$year == year,], by.x = "id",
            by.y = "countrycode")
 x <- x[,c("id",var,"geometry")]
 x[,"v"] <- round(x[,var] %>% st_drop_geometry() /onedot,0)
+x = x[x$v > 0,]
 dots <- st_sample(x, x$v, type = position, exact = TRUE)
 dots <- data.frame(st_coordinates(dots),radius)
 colnames(dots) <- c("x","y","v")
@@ -647,7 +776,10 @@ text(x= 0, y = -6000000, paste0("1 dot = ",onedot, " ",unit), cex = 1.1, pos = 3
 
 Position = "center"
 
-```{r eval=TRUE, message=FALSE, warning=FALSE}
+```{r}
+#| eval = TRUE,
+#| message = FALSE,
+#| warning = FALSE
 
 file <- "maps/center_dodgedotmapgdp2018.png"
 
@@ -656,7 +788,7 @@ if (!file.exists(file)){
   dodgedotmap2(var = "gdp",year = 2018, itermax = 100, onedot = 60,
                 radius = 80000, col = red, 
                 position = "center",
-                title = "Dots cartogram du PIB (centre)",
+                title = "Dodge Dotmap du PIB (centre)",
                 unit = "milliards de $")
   dev.off()
 
@@ -667,7 +799,10 @@ if (!file.exists(file)){
 
 Carte avec position = "random"
 
-```{r eval=TRUE, message=FALSE, warning=FALSE}
+```{r}
+#| eval = TRUE,
+#| message = FALSE,
+#| warning = FALSE
 
 file <- "maps/random_dodgedotmapgdp2018.png"
 
@@ -676,7 +811,7 @@ if (!file.exists(file)){
   dodgedotmap2(var = "gdp",year = 2018, itermax = 100, onedot = 60,
                 radius = 80000, col = red,
                 position = "random",
-                title = "Dots cartogram du PIB (aléatoire)",
+                title = "Dodge Dotmap du PIB (aléatoire)",
                 unit = "milliards de $")
   dev.off()
 
@@ -688,7 +823,10 @@ if (!file.exists(file)){
 
 Position = "regular"
 
-```{r eval=TRUE, message=FALSE, warning=FALSE}
+```{r}
+#| eval = TRUE,
+#| message = FALSE,
+#| warning = FALSE
 
 file <- "maps/regular_dodgedotmapgdp2018.png"
 
@@ -697,10 +835,9 @@ if (!file.exists(file)){
   dodgedotmap2(var = "gdp",year = 2018, itermax = 100, onedot = 60,
                 radius = 80000, col = red,
                 position = "regular",
-                title = "Dots cartogram du PIB (régulier)",
+                title = "Dodge Dotmap du PIB (régulier)",
                 unit = "milliards de $")
   dev.off()
-
 }
 ```
 
@@ -710,7 +847,10 @@ if (!file.exists(file)){
 
 Dans cette variante, nous proposons de colorer les points en fonction d'une donnée quantitative relative : le pib par habitant. Pour faire simple, et parce que ce point particulier n'est pas central ici, nous utilisons dans ce cas le package *cartography* et sa fonction *choroLayer()*.
 
-```{r eval=TRUE, message=FALSE, warning=FALSE}
+```{r}
+#| eval = TRUE,
+#| message = FALSE,
+#| warning = FALSE
 
 library(cartography)
 
@@ -780,7 +920,10 @@ if (!file.exists(file)){
 
 Ici, nous proposons une autre alternative où le nombre de points dans chaque pays est le même. C'est le paramètre qui est fixé. Par conséquent, la surface des cercles à l'intérieur des pays est modifiée pour refléter les quantités. Ci-dessous, nous décidons d'avoir 50 points par pays. 
 
-```{r eval=TRUE, message=FALSE, warning=FALSE}
+```{r}
+#| eval = TRUE,
+#| message = FALSE,
+#| warning = FALSE
 
 dodgedotmap4 <- function(var = "pop", year = 2018, itermax = 10,
                           divide = 4, k = 1, col = red,
@@ -811,7 +954,10 @@ plot(st_geometry(circles), col = col, border= "#283445", lwd = 0.5, add= T)
 
 ```
 
-```{r eval=TRUE, message=FALSE, warning=FALSE}
+```{r}
+#| eval = TRUE,
+#| message = FALSE,
+#| warning = FALSE
 
 file <- "maps/dodgedotmappop2018_alter.png"
 
@@ -828,7 +974,10 @@ if (!file.exists(file)){
 <a href ="maps/dodgedotmappop2018_alter.png" target = "_BLANK"><img src ="maps/dodgedotmappop2018_alter.png" width = "100%"></img></a>
 
 
-```{r eval=TRUE, message=FALSE, warning=FALSE}
+```{r}
+#| eval = TRUE,
+#| message = FALSE,
+#| warning = FALSE
 
 file <- "maps/dodgedotmapgdp2018_alter.png"
 
@@ -848,7 +997,10 @@ if (!file.exists(file)){
 
 PIB de 1950 à 2018.
 
-```{r eval=TRUE, message=FALSE, warning=FALSE}
+```{r}
+#| eval = TRUE,
+#| message = FALSE,
+#| warning = FALSE
 
 for (year in 1950:2018){
   
@@ -868,7 +1020,10 @@ if (!file.exists(file)){
 
 png -> gif
 
-```{r eval=TRUE, message=FALSE, warning=FALSE}
+```{r}
+#| eval = TRUE,
+#| message = FALSE,
+#| warning = FALSE
 file <- "maps/gdp.gif"
 if (!file.exists(file)){
 frames <- paste0("tmp/gdp/",list.files("tmp/gdp"))
@@ -884,7 +1039,10 @@ image_write(m, file)
 
 Population de 1950 à 2018.
 
-```{r eval=TRUE, message=FALSE, warning=FALSE}
+```{r}
+#| eval = TRUE,
+#| message = FALSE,
+#| warning = FALSE
 
 for (year in 1950:2018){
 
@@ -904,7 +1062,10 @@ if (!file.exists(file)){
 
 png -> gif
 
-```{r eval=TRUE, message=FALSE, warning=FALSE}
+```{r}
+#| eval = TRUE,
+#| message = FALSE,
+#| warning = FALSE
 file <- "maps/pop.gif"
 if (!file.exists(file)){
 frames <- paste0("tmp/pop/",list.files("tmp/pop"))
@@ -919,7 +1080,10 @@ image_write(m, file)
 
 ## Comparaison Dorling / Dot Cartograms
 
-```{r eval=TRUE, message=FALSE, warning=FALSE}
+```{r}
+#| eval = TRUE,
+#| message = FALSE,
+#| warning = FALSE
 file <- "maps/pop_transform.gif"
 if (!file.exists(file)){
 frames <- c("maps/drolingpop2018.png", "maps/dodgedotmappop2018.png")
@@ -931,7 +1095,10 @@ image_write(m, file)
 
 <a href ="maps/pop_transform.gif" target = "_BLANK"><img src ="maps/pop_transform.gif" width = "100%"></img></a>
 
-```{r eval=TRUE, message=FALSE, warning=FALSE}
+```{r}
+#| eval = TRUE,
+#| message = FALSE,
+#| warning = FALSE
 file <- "maps/gdp_transform.gif"
 if (!file.exists(file)){
 frames <- c("maps/drolinggdp2018.png","maps/dodgedotmapgdp2018.png")
