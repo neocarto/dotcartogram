@@ -18,7 +18,7 @@ execute:
 
 ## Les données
 
-Toutes les cartes construites dans cette publication sont basées sur les données de la [base de données du projet Maddison 2018](https://www.rug.nl/ggdc/historicaldevelopment/maddison/data/mpd2018.xlsx). Cette base de données réalisée pa Jutta Bolt, Robert Inklaar, Herman de Jong et Jan Luiten van Zanden est sous licence [Creative Commons Attribution 4.0 International License](https://creativecommons.org/licenses/by/4.0/). Toute la documentation est disponible sur le [site web] (https://www.rug.nl/ggdc/historicaldevelopment/maddison/releases/maddison-project-database-2018?lang=en). La carte de base des pays du monde utilisée ici est extraite du projet [Magrit](http://magrit.cnrs.fr/). 
+Toutes les cartes construites dans cette publication sont basées sur les données de la [base de données du projet Maddison 2018](https://www.rug.nl/ggdc/historicaldevelopment/maddison/data/mpd2018.xlsx). Cette base de données réalisée pa Jutta Bolt, Robert Inklaar, Herman de Jong et Jan Luiten van Zanden est sous licence [Creative Commons Attribution 4.0 International License](https://creativecommons.org/licenses/by/4.0/). Toute la documentation est disponible sur le [site web](https://www.rug.nl/ggdc/historicaldevelopment/maddison/releases/maddison-project-database-2018?lang=en). Les géométries utilisées proviennnet du projet [Magrit](http://magrit.cnrs.fr/) et de la base de données [Natural Earth](https://www.naturalearthdata.com/).
 
 ## Packages
 
@@ -56,7 +56,7 @@ countries <- countries[,c("ISO3", "NAMEen", "NAMEfr","geometry")]
 colnames(countries) <- c("id", "NAMEen", "NAMEfr","geometry")
 ```
 
-Graticule & sphere
+Graticule & sphère
 
 ```{r}
 #| eval = TRUE,
@@ -144,7 +144,7 @@ l1 = c("SVK", "CZE", "RUS", "UKR", "BLR", "MDA", "UZB","KAZ",
 world1 <- countries[!countries$id %in% l1,]
 ```
 
-Le mond en 1992.
+Le monde en 1992.
 
 ```{r}
 #| eval = TRUE,
@@ -180,6 +180,8 @@ missing <- countries[countries$id %in% l,]
 ```
 
 ## Dossiers
+
+Création de dossiers pour enregistrer les cartes.
 
 ```{r}
 #| eval = TRUE,
@@ -377,7 +379,7 @@ if (!file.exists(file)){
 
 <a href ="maps/maptemplate.png" target = "_BLANK"><img src ="maps/maptemplate.png" width = "100%"></img></a>
 
-## Centroîdes
+## Centroïdes
 
 ```{r}
 #| eval = TRUE,
@@ -467,7 +469,7 @@ if (!file.exists(file)){
   png(file, width = 2000, height = 1120, res = 150)
   propsymbols(var = "gdp",year = 2018, k = kgdp, col = red,
             title = "PIB mondial par symboles proportionnels en 2018",
-            leg.title = "PIB en milliards (US$ 2011))")
+            leg.title = "PIB en milliards (US$ 2011)")
   dev.off()
   
 }
@@ -498,7 +500,7 @@ circles <- st_buffer(dots, dist = radius)
 
 template(year = year, title = title)
 plot(st_geometry(circles), col = col, border= "#283445", lwd = 0.5, add = T)
-text(x= 0, y = -6000000, paste0("1 dot = ",onedot, " ",unit),
+text(x= 0, y = -6000000, paste0("1 point = ",onedot, " ",unit),
        cex = 1.1, pos = 3, font = 2, col = col)
 }
 
@@ -643,7 +645,7 @@ circles <- st_buffer(sf::st_as_sf(simulation, coords =c('x', 'y'),
                       crs = sf::st_crs(sphere)), dist = radius) 
 template(year = year, title = title)
 plot(st_geometry(circles), col = col, border= "#283445", lwd = 0.5, add= T)
-  text(x= 0, y = -6000000, paste0("1 dot = ",onedot, " ",unit), cex = 1.1, pos = 3, font = 2,
+  text(x= 0, y = -6000000, paste0("1 point = ",onedot, " ",unit), cex = 1.1, pos = 3, font = 2,
        col = col)
 }
 
@@ -711,7 +713,7 @@ if (!file.exists(file)){
 
 ## Dodge Dotmap (amélioration)
 
-Ici, nous ajoutons le paramètre "position" à la fonction dodgedotmapme afin que les points puissent être disposés de manière régulière ou aléatoire à l'intérieur des pays, et non plus seulement répartis à partir du centroïde. Les trois cartes suivantes vous permettent de visualiser l'effet de ce paramètre.
+Ici, nous ajoutons le paramètre "position" à la fonction dodgedotmap afin que les points puissent être disposés de manière régulière ou aléatoire à l'intérieur des pays, et non plus seulement répartis à partir du centroïde. Les trois cartes suivantes vous permettent de visualiser l'effet de ce paramètre.
 
 ```{r}
 #| eval = TRUE,
@@ -767,7 +769,7 @@ circles <- st_buffer(sf::st_as_sf(simulation, coords =c('x', 'y'),
 
 template(year = year, title = title)
 plot(st_geometry(circles), col = col, border= "#283445", lwd = 0.5, add= T)
-text(x= 0, y = -6000000, paste0("1 dot = ",onedot, " ",unit), cex = 1.1, pos = 3, font = 2,
+text(x= 0, y = -6000000, paste0("1 point = ",onedot, " ",unit), cex = 1.1, pos = 3, font = 2,
        col = col)
   
 }
@@ -845,14 +847,14 @@ if (!file.exists(file)){
 
 ## Variation 1
 
-Dans cette variante, nous proposons de colorer les points en fonction d'une donnée quantitative relative : le pib par habitant. Pour faire simple, et parce que ce point particulier n'est pas central ici, nous utilisons dans ce cas le package *cartography* et sa fonction *choroLayer()*.
+Dans cette variante, nous proposons de colorer les points en fonction d'une donnée quantitative relative : le pib par habitant. Pour faire simple, et parce que ce point particulier n'est pas central ici, nous utilisons dans ce cas le package *mapsf*.
 
 ```{r}
 #| eval = TRUE,
 #| message = FALSE,
 #| warning = FALSE
 
-library(cartography)
+library(mapsf)
 
 var = "gdp"
 year = 2018
@@ -862,7 +864,7 @@ radius = 90000
 cols <- c("#ffffb2","#fed976","#feb24c","#fd8d3c","#f03b20","#bd0026")
 title = "La richesse dans le monde en 2018"
 unit = "milliards de $"
-file <- "maps/dotcartogramratio.png"
+file <- "maps/dodgeratio.png"
 
 
 if (!file.exists(file)){
@@ -898,14 +900,12 @@ if (!file.exists(file)){
   png(file, width = 2000, height = 1120, res = 150)
   template(year = year, title = title)
   
-  choroLayer(x = circles, var = "s", method = "q6", col = cols,
-             legend.title.txt = "PIB par habitant (en $)",
-             legend.pos = c(-13000000, -4000000),
-             legend.title.cex = 0.8,
-  legend.values.cex = 0.6,
-  add=T)
+  mf_map(x = circles, var = "s", type = "choro",   pal = cols,
+  breaks = "quantile", nbreaks = 6, leg_val_rnd = 0,
+  leg_pos = c(-13000000, -1000000), leg_title = "PIB par habitant (en $)", 
+  add = TRUE)
   
-    text(x= 0, y = -6000000, paste0("1 dot = ",onedot, " ",unit), cex = 1.1, pos = 3, font = 2,
+  text(x= 0, y = -6000000, paste0("1 point = ",onedot, " ",unit), cex = 1.1, pos = 3, font = 2,
          col = red)
   
   dev.off()
@@ -914,7 +914,7 @@ if (!file.exists(file)){
 ```
 
 
-<a href ="maps/dotcartogramratio.png" target = "_BLANK"><img src ="maps/dotcartogramratio.png" width = "100%"></img></a>
+<a href ="maps/dodgeratio.png" target = "_BLANK"><img src ="maps/dodgeratio.png" width = "100%"></img></a>
 
 ## Variation 2
 
@@ -1112,7 +1112,7 @@ image_write(m, file)
 
 ## Addendum
 
-La méthode est également disponible en javascript avec la bibliothèque D3.js. Le code est disponible [ici] (https://observablehq.com/d/23eaf5593be0ed2f) et le résultat est affiché ci-dessous. 
+La méthode est également disponible en javascript avec la bibliothèque D3.js. Le code est disponible [ici](https://observablehq.com/d/23eaf5593be0ed2f) et le résultat est affiché ci-dessous. 
 
 <div id="observablehq-viewof-year-b178b026"></div>
 <div id="observablehq-viewof-mydata-b178b026"></div>
@@ -1139,6 +1139,6 @@ new Runtime().module(define, name => {
 });
 </script>
 
+<br/>
 
-
-
+La méthode est également implémentée dans la bibliothèque JavaScript [`bertin`](https://github.com/neocarto/bertin). Voir : [@neocartocnrs/bertin-js-dots-cartograms](https://observablehq.com/@neocartocnrs/bertin-js-dots-cartograms?collection=@neocartocnrs/bertin)
