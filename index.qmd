@@ -1,5 +1,5 @@
 ---
-title: "Dodge Dotmaps"
+title: "Le cartogramme par points – The Dot Cartogram "
 author: "Lambert N. & Bahoken F."
 format:
   html:
@@ -14,7 +14,7 @@ execute:
   
 ---
 
-**Ce document technique accompagne l'article intitulé "La carte par points juxtaposés – The Dodge Dotmap" de Françoise Bahoken et Nicolas Lambert. Il propose une collection de "cartes à points" réalisées en langage R à partir de données de population et de richesse à l'échelle mondiale. Pour assurer la traçabilité et la reproductibilité, les codes sources (R) sont détaillés tout au long du document.**
+**Ce document technique accompagne l'article intitulé "Le cartogramme par points – The Dot cartogram" de Françoise Bahoken et Nicolas Lambert. Il propose une collection de "cartogrammes par points" réalisés en langage R à partir de données de population et de richesse à l'échelle mondiale. Pour assurer la traçabilité et la reproductibilité, les codes sources (R) sont détaillés tout au long du document.**
 
 ## Les données
 
@@ -285,7 +285,6 @@ return(x)
 
 ```
 
-
 Calibration de la taille.
 
 ```{r}
@@ -301,7 +300,6 @@ kgdp <- rmax * rmax /max(x$v)
 ```
 
 Légende
-
 
 ```{r}
 #| eval = TRUE,
@@ -609,14 +607,14 @@ if (!file.exists(file)){
 
 <a href ="maps/drolinggdp2018.png" target = "_BLANK"><img src ="maps/drolinggdp2018.png" width = "100%"></img></a>
 
-## Dodge Dotmap
+## Cartogramme par points
 
 ```{r}
 #| eval = TRUE,
 #| message = FALSE,
 #| warning = FALSE
 
-dodgedotmap <- function(var = "pop", year = 2018, itermax = 10,
+dotcartogram <- function(var = "pop", year = 2018, itermax = 10,
                           onedot = 1, radius = 1, col = red,
                           title = "Map Title", unit = ""){
   
@@ -656,19 +654,19 @@ plot(st_geometry(circles), col = col, border= "#283445", lwd = 0.5, add= T)
 #| message = FALSE,
 #| warning = FALSE
 
-file <- "maps/dodgedotmappop2018.png"
+file <- "maps/dotcartogrampop2018.png"
 
 if (!file.exists(file)){
   png(file, width = 2000, height = 1120, res = 150)
-  dodgedotmap(var = "pop",year = 2018, itermax = 70, onedot = 10000,
+  dotcartogram(var = "pop",year = 2018, itermax = 70, onedot = 10000,
                 radius = 100000, col = blue, 
-                title = "Dodge Dotmap de la population mondiale en 2018", unit = "hab.")
+                title = "Cartogramme par points de la population mondiale en 2018", unit = "hab.")
   dev.off()
 
 }
 ```
 
-<a href ="maps/dodgedotmappop2018.png" target = "_BLANK"><img src ="maps/dodgedotmappop2018.png" width = "100%"></img></a>
+<a href ="maps/dotcartogrampop2018.png" target = "_BLANK"><img src ="maps/dotcartogrampop2018.png" width = "100%"></img></a>
 
 
 ```{r}
@@ -676,11 +674,11 @@ if (!file.exists(file)){
 #| message = FALSE,
 #| warning = FALSE
 
-file <- "maps/dodgedotmapgdp2018.png"
+file <- "maps/dotcartogramgdp2018.png"
 
 if (!file.exists(file)){
   png(file, width = 2000, height = 1120, res = 150)
-  dodgedotmap(var = "gdp",year = 2018, itermax = 70, onedot = 100,
+  dotcartogram(var = "gdp",year = 2018, itermax = 70, onedot = 100,
                 radius = 100000, col = red, 
                 title = "Dodge Dotmap du PIB mondial en 2018",  unit = "milliards $")
   dev.off()
@@ -688,7 +686,7 @@ if (!file.exists(file)){
 }
 ```
 
-<a href ="maps/dodgedotmapgdp2018.png" target = "_BLANK"><img src ="maps/dodgedotmapgdp2018.png" width = "100%"></img></a>
+<a href ="maps/dotcartogramgdp2018.png" target = "_BLANK"><img src ="maps/dotcartogramgdp2018.png" width = "100%"></img></a>
 
 Bien sûr, nous pouvons modifier la taille et la valeur de chaque point.
 
@@ -697,30 +695,30 @@ Bien sûr, nous pouvons modifier la taille et la valeur de chaque point.
 #| message = FALSE,
 #| warning = FALSE
 
-file <- "maps/dodgedotmapgdp2018_v2.png"
+file <- "maps/dotcartogramgdp2018_v2.png"
 
 if (!file.exists(file)){
   png(file, width = 2000, height = 1120, res = 150)
-  dodgedotmap(var = "gdp",year = 2018, itermax = 100, onedot = 20,
+  dotcartogram(var = "gdp",year = 2018, itermax = 100, onedot = 20,
                 radius = 60000, col = red, 
-                title = "Dodge Dotmap du PIB mondial, 2018", unit = "milliards de $")
+                title = "Cartogramme par points du PIB mondial, 2018", unit = "milliards de $")
   dev.off()
 
 }
 ```
 
-<a href ="maps/dodgedotmapgdp2018_v2.png" target = "_BLANK"><img src ="maps/dodgedotmapgdp2018_v2.png" width = "100%"></img></a>
+<a href ="maps/dotcartogramgdp2018_v2.png" target = "_BLANK"><img src ="maps/dotcartogramgdp2018_v2.png" width = "100%"></img></a>
 
-## Dodge Dotmap (amélioration)
+## Cartogramme par points (amélioration)
 
-Ici, nous ajoutons le paramètre "position" à la fonction dodgedotmap afin que les points puissent être disposés de manière régulière ou aléatoire à l'intérieur des pays, et non plus seulement répartis à partir du centroïde. Les trois cartes suivantes vous permettent de visualiser l'effet de ce paramètre.
+Ici, nous ajoutons le paramètre "position" à la fonction dotcartogram afin que les points puissent être disposés de manière régulière ou aléatoire à l'intérieur des pays, et non plus seulement répartis à partir du centroïde. Les trois cartes suivantes vous permettent de visualiser l'effet de ce paramètre.
 
 ```{r}
 #| eval = TRUE,
 #| message = FALSE,
 #| warning = FALSE
 
-dodgedotmap2 <- function(var = "pop", year = 2018, itermax = 10,
+dotcartogram2 <- function(var = "pop", year = 2018, itermax = 10,
                           onedot = 1, position = "center", radius = 1, col = red,
                           title = "Map Title", unit = ""){
   
@@ -783,21 +781,21 @@ Position = "center"
 #| message = FALSE,
 #| warning = FALSE
 
-file <- "maps/center_dodgedotmapgdp2018.png"
+file <- "maps/center_dotcartogramgdp2018.png"
 
 if (!file.exists(file)){
   png(file, width = 2000, height = 1120, res = 150)
-  dodgedotmap2(var = "gdp",year = 2018, itermax = 100, onedot = 60,
+  dotcartogram2(var = "gdp",year = 2018, itermax = 100, onedot = 60,
                 radius = 80000, col = red, 
                 position = "center",
-                title = "Dodge Dotmap du PIB (centre)",
+                title = "Cartogramme par points du PIB (centre)",
                 unit = "milliards de $")
   dev.off()
 
 }
 ```
 
-<a href ="maps/center_dodgedotmapgdp2018.png" target = "_BLANK"><img src ="maps/center_dodgedotmapgdp2018.png" width = "100%"></img></a>
+<a href ="maps/center_dotcartogramgdp2018.png" target = "_BLANK"><img src ="maps/center_dotcartogramgdp2018.png" width = "100%"></img></a>
 
 Carte avec position = "random"
 
@@ -806,21 +804,21 @@ Carte avec position = "random"
 #| message = FALSE,
 #| warning = FALSE
 
-file <- "maps/random_dodgedotmapgdp2018.png"
+file <- "maps/random_dotcartogramgdp2018.png"
 
 if (!file.exists(file)){
   png(file, width = 2000, height = 1120, res = 150)
-  dodgedotmap2(var = "gdp",year = 2018, itermax = 100, onedot = 60,
+  dotcartogram2(var = "gdp",year = 2018, itermax = 100, onedot = 60,
                 radius = 80000, col = red,
                 position = "random",
-                title = "Dodge Dotmap du PIB (aléatoire)",
+                title = "Cartogramme par points du PIB (aléatoire)",
                 unit = "milliards de $")
   dev.off()
 
 }
 ```
 
-<a href ="maps/random_dodgedotmapgdp2018.png" target = "_BLANK"><img src ="maps/random_dodgedotmapgdp2018.png" width = "100%"></img></a>
+<a href ="maps/random_dotcartogramgdp2018.png" target = "_BLANK"><img src ="maps/random_dotcartogramgdp2018.png" width = "100%"></img></a>
 
 
 Position = "regular"
@@ -830,20 +828,20 @@ Position = "regular"
 #| message = FALSE,
 #| warning = FALSE
 
-file <- "maps/regular_dodgedotmapgdp2018.png"
+file <- "maps/regular_dotcartogramgdp2018.png"
 
 if (!file.exists(file)){
   png(file, width = 2000, height = 1120, res = 150)
-  dodgedotmap2(var = "gdp",year = 2018, itermax = 100, onedot = 60,
+  dotcartogram2(var = "gdp",year = 2018, itermax = 100, onedot = 60,
                 radius = 80000, col = red,
                 position = "regular",
-                title = "Dodge Dotmap du PIB (régulier)",
+                title = "Cartogramme par points du PIB (régulier)",
                 unit = "milliards de $")
   dev.off()
 }
 ```
 
-<a href ="maps/regular_dodgedotmapgdp2018.png" target = "_BLANK"><img src ="maps/regular_dodgedotmapgdp2018.png" width = "100%"></img></a>
+<a href ="maps/regular_dotcartogramgdp2018.png" target = "_BLANK"><img src ="maps/regular_dotcartogramgdp2018.png" width = "100%"></img></a>
 
 ## Variation 1
 
@@ -925,7 +923,7 @@ Ici, nous proposons une autre alternative où le nombre de points dans chaque pa
 #| message = FALSE,
 #| warning = FALSE
 
-dodgedotmap4 <- function(var = "pop", year = 2018, itermax = 10,
+dotcartogram4 <- function(var = "pop", year = 2018, itermax = 10,
                           divide = 4, k = 1, col = red,
                           title = "Map Title", legtitle = "Legend"){
   
@@ -959,11 +957,11 @@ plot(st_geometry(circles), col = col, border= "#283445", lwd = 0.5, add= T)
 #| message = FALSE,
 #| warning = FALSE
 
-file <- "maps/dodgedotmappop2018_alter.png"
+file <- "maps/dotcartogrampop2018_alter.png"
 
 if (!file.exists(file)){
   png(file, width = 2000, height = 1120, res = 150)
-  dodgedotmap4(var = "pop",year = 2018, k = kpop, itermax = 20, divide = 50, col = blue,
+  dotcartogram4(var = "pop",year = 2018, k = kpop, itermax = 20, divide = 50, col = blue,
             title = "Population mondiale, en 2018 (divide = 50)", legtitle = "Nombre d'habitants")
   dev.off()
 
@@ -971,7 +969,7 @@ if (!file.exists(file)){
 
 ```
 
-<a href ="maps/dodgedotmappop2018_alter.png" target = "_BLANK"><img src ="maps/dodgedotmappop2018_alter.png" width = "100%"></img></a>
+<a href ="maps/dotcartogrampop2018_alter.png" target = "_BLANK"><img src ="maps/dotcartogrampop2018_alter.png" width = "100%"></img></a>
 
 
 ```{r}
@@ -979,11 +977,11 @@ if (!file.exists(file)){
 #| message = FALSE,
 #| warning = FALSE
 
-file <- "maps/dodgedotmapgdp2018_alter.png"
+file <- "maps/dotcartogramgdp2018_alter.png"
 
 if (!file.exists(file)){
   png(file, width = 2000, height = 1120, res = 150)
-  dodgedotmap4(var = "gdp",year = 2018, k = kgdp, itermax = 20, divide = 50, col = red,
+  dotcartogram4(var = "gdp",year = 2018, k = kgdp, itermax = 20, divide = 50, col = red,
             title = "PIB mondial en 2018 (divide = 50)", legtitle = "PIB (en $)")
   dev.off()
 
@@ -991,7 +989,7 @@ if (!file.exists(file)){
 
 ```
 
-<a href ="maps/dodgedotmapgdp2018_alter.png" target = "_BLANK"><img src ="maps/dodgedotmapgdp2018_alter.png" width = "100%"></img></a>
+<a href ="maps/dotcartogramgdp2018_alter.png" target = "_BLANK"><img src ="maps/dotcartogramgdp2018_alter.png" width = "100%"></img></a>
 
 ## Timelines 
 
@@ -1008,7 +1006,7 @@ file <- paste0("tmp/gdp/gdp_",year,".png" )
   
 if (!file.exists(file)){
    png(file, width = 2000, height = 1120, res = 150)
-   dodgedotmap(var = "gdp",year = year, itermax = 100, onedot = 40,
+   dotcartogram(var = "gdp",year = year, itermax = 100, onedot = 40,
                  radius = 75000, col = red, 
                  title = paste0("Richesse mondiale en ", year), unit = "milliards de $")
    dev.off()
@@ -1050,7 +1048,7 @@ file <- paste0("tmp/pop/pop_",year,".png" )
 
 if (!file.exists(file)){
    png(file, width = 2000, height = 1120, res = 150)
-   dodgedotmap(var = "pop",year = year, itermax = 100, onedot = 4000,
+   dotcartogram(var = "pop",year = year, itermax = 100, onedot = 4000,
                  radius = 75000, col = blue,
                  title = paste0("Population mondiale en ", year), unit = "hab.")
    dev.off()
@@ -1078,7 +1076,7 @@ image_write(m, file)
 <a href ="maps/pop.gif" target = "_BLANK"><img src ="maps/pop.gif" width = "100%"></img></a>
 
 
-## Comparaison Dorling / Dot Cartograms
+## Comparaison Dorling / Cartogramme par points
 
 ```{r}
 #| eval = TRUE,
@@ -1086,7 +1084,7 @@ image_write(m, file)
 #| warning = FALSE
 file <- "maps/pop_transform.gif"
 if (!file.exists(file)){
-frames <- c("maps/drolingpop2018.png", "maps/dodgedotmappop2018.png")
+frames <- c("maps/drolingpop2018.png", "maps/dotcartogrampop2018.png")
 m <- image_read(frames)
 m <- image_animate(m, fps = 2)
 image_write(m, file)
@@ -1101,7 +1099,7 @@ image_write(m, file)
 #| warning = FALSE
 file <- "maps/gdp_transform.gif"
 if (!file.exists(file)){
-frames <- c("maps/drolinggdp2018.png","maps/dodgedotmapgdp2018.png")
+frames <- c("maps/drolinggdp2018.png","maps/dotcartogramgdp2018.png")
 m <- image_read(frames)
 m <- image_animate(m, fps = 2)
 image_write(m, file)
