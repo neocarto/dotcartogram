@@ -8,11 +8,11 @@ link_citations: true
   
 ---
 
-**Ce document technique accompagne l'article intitulé "Le Dot cartogram " de Françoise Bahoken et Nicolas Lambert. Il propose une collection de "cartes à points" réalisées en langage R à partir de données de population et de richesse à l'échelle mondiale. Pour assurer la traçabilité et la reproductibilité, les codes sources (R) sont détaillés tout au long du document..**
+**Ce document technique accompagne l'article intitulé "Le cartogramme par points - The Dotcartogram" [accéder](https://journals.openedition.org/cybergeo/40820) de Françoise Bahoken et Nicolas Lambert. Il propose une collection de "cartes à points" réalisées en langage R à partir de données de population et de richesse à l'échelle mondiale. Pour assurer la traçabilité et la reproductibilité, les codes sources (R) sont détaillés tout au long du document.**
 
 ## Les données
 
-Toutes les cartes construites dans cette publication sont basées sur les données de la [base de données du projet Maddison 2018](https://www.rug.nl/ggdc/historicaldevelopment/maddison/data/mpd2018.xlsx). Cette base de données réalisée pa Jutta Bolt, Robert Inklaar, Herman de Jong et Jan Luiten van Zanden est sous licence [Creative Commons Attribution 4.0 International License](https://creativecommons.org/licenses/by/4.0/). Toute la documentation est disponible sur le [site web] (https://www.rug.nl/ggdc/historicaldevelopment/maddison/releases/maddison-project-database-2018?lang=en). La carte de base des pays du monde utilisée ici est extraite du projet [Magrit](http://magrit.cnrs.fr/). 
+Toutes les cartes construites dans cette publication sont basées sur les données de la [base de données du projet Maddison 2018](https://www.rug.nl/ggdc/historicaldevelopment/maddison/data/mpd2018.xlsx). Cette base de données réalisée par Jutta Bolt, Robert Inklaar, Herman de Jong et Jan Luiten van Zanden est sous licence [Creative Commons Attribution 4.0 International License](https://creativecommons.org/licenses/by/4.0/). Toute la documentation est disponible sur le [site web] (https://www.rug.nl/ggdc/historicaldevelopment/maddison/releases/maddison-project-database-2018?lang=en). La carte de base des pays du monde utilisée ici est extraite du projet [Magrit](http://magrit.cnrs.fr/). 
 
 ## Packages
 
